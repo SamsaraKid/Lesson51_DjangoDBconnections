@@ -1,5 +1,5 @@
 body{
-    font-family: "Yu Gothic Light";
+    font-family: "Yu Gothic";
     background-color: lightslategray;
     text-align: center;
 }
@@ -22,8 +22,9 @@ button, input[type=submit], select{
     border-bottom-color: darkblue;
     border-right-color: darkblue;
     padding: 10px;
-    font-family: "Yu Gothic Light";
-    color: mediumaquamarine;
+    font-family: "Yu Gothic";
+    color: chocolate;
+    margin-top: 10px;
 }
 
 button:hover, input[type=submit]:hover{
@@ -42,16 +43,20 @@ table{
     margin: auto;
     border-collapse: collapse;
     border: double 5px black;
+    font-family: "Yu Gothic";
 }
 
 td{
     border: 1px dotted black;
     padding: 5px;
     width: 100px;
+    background-color: slategrey;
 }
 
 th{
     border: 1px solid black;
     padding: 5px;
+    width: 140px;
+    background-color: darkcyan;
 }
 

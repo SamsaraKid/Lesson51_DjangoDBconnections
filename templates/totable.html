@@ -26,8 +26,10 @@
 <form action="" method="post">
     {% csrf_token %}
     {{ forma }}
-    <input type="submit" value="SEARCH">
+    <input type="submit" value="Поиск">
 </form>
+
+<a href="{% url 'index' %}"><button>Главная</button></a>
 
 </body>
 </html>
