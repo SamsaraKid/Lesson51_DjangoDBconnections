@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from .models import *
 from .myforms import *
+from random import choice
 
 
 def index(req):
@@ -22,6 +23,15 @@ def add(req):
     # print(c2.product_set.values())
     # print(c2.product_set.values_list())
 
+    # volumes = (0.25, 0.33, 1.0, 1.5, 2.0)
+    # packs = ('plactic', 'glass', 'tetrapak')
+    # recom = (True, False)
+    # for juice in Product.objects.all():
+    #     juice.volume = choice(volumes)
+    #     juice.pack = choice(packs)
+    #     juice.recomend = choice(recom)
+    #     juice.save()
+
     # s1 = Student.objects.create(name='Viktor', group='G001')
     # s2 = Student.objects.create(name='Igor', group='G001')
     # s3 = Student.objects.create(name='Alex', group='G001')
@@ -39,20 +49,24 @@ def table1(req):
     anketa = FormJuice()
     bd = []
     if req.POST:
-        anketa = FormJuice(req.POST)
-        a = req.POST['firma']
-        b = req.POST['juice']
-        if a and not b:
-            baza = Product.objects.filter(firma_id=a)
-        elif b and not a:
-            c = Product.objects.get(id=b).name
-            baza = Product.objects.filter(name=c)
-        elif a and b:
-            c = Product.objects.get(id=b).name
-            baza = Product.objects.filter(firma_id=a, name=c)
+        if FormJuice(req.POST).is_valid():
+            data = FormJuice(req.POST).cleaned_data
+            if data['firma']:
+                data['firma'] = Company.objects.get(title=data['firma']).id
+            search = {k: v for (k, v) in data.items() if v != None}
+            baza = Product.objects.filter(**search)
+
+        # if a and not b:
+        #     baza = Product.objects.filter(firma_id=a)
+        # elif b and not a:
+        #     c = Product.objects.get(id=b).name
+        #     baza = Product.objects.filter(name=c)
+        # elif a and b:
+        #     c = Product.objects.get(id=b).name
+        #     baza = Product.objects.filter(firma_id=a, name=c)
     for i in baza:
-        bd.append((i.name, i.price, i.firma.title))
-    title = ('Название', 'Цена', 'Фирма')
+        bd.append((i.name, i.price, i.firma.title, i.volume, i.pack, i.recomend))
+    title = ('Название', 'Цена', 'Фирма', 'Объём', 'Упаковка', 'Рекомендован')
     data = {'table': bd, 'title': title, 'forma': anketa}
     return render(req, 'totable.html', context=data)
 

@@ -4,17 +4,20 @@ from django.db import models
 class Company(models.Model):
     title = models.CharField(max_length=20)
 
-    def __str__(self):
-        return self.title
+    # def __str__(self):
+    #     return self.title
 
 
 class Product(models.Model):
     name = models.CharField(max_length=10)
     price = models.IntegerField()
     firma = models.ForeignKey(Company, on_delete=models.CASCADE)
+    volume = models.DecimalField(max_digits=4, decimal_places=2)
+    pack = models.CharField(max_length=10)
+    recomend = models.BooleanField(null=True)
 
-    def __str__(self):
-        return self.name
+    # def __str__(self):
+    #     return self.name
 
 
 class Course(models.Model):
