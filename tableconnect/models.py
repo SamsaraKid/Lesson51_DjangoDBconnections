@@ -34,3 +34,16 @@ class Student(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class User(models.Model):
+    name = models.CharField(max_length=20)
+
+    def __str__(self):
+        return self.name
+
+
+class Account(models.Model):
+    login = models.CharField(max_length=20)
+    password = models.CharField(max_length=20)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)

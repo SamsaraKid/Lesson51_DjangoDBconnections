@@ -41,6 +41,12 @@ def add(req):
     # k2 = Course.objects.create(title='Geo')
     # k1.student_set.add(s1, s3, s5)
     # k2.student_set.add(s1, s2, s3)
+
+    # u1 = User.objects.create(name='Alex')
+    # ac1 = Account.objects.create(login='qwe', password='12345', user=u1)
+    # u2 = User.objects.create(name='Igor')
+    # ac1 = Account.objects.create(login='asd', password='67890', user=u2)
+
     return redirect('index')
 
 
@@ -49,8 +55,9 @@ def table1(req):
     anketa = FormJuice()
     bd = []
     if req.POST:
-        if FormJuice(req.POST).is_valid():
-            data = FormJuice(req.POST).cleaned_data
+        anketa = FormJuice(req.POST)
+        if anketa.is_valid():
+            data = anketa.cleaned_data
             if data['firma']:
                 data['firma'] = Company.objects.get(title=data['firma']).id
             search = {k: v for (k, v) in data.items() if v != None}
@@ -79,17 +86,38 @@ def table2(req):
         anketa = FormStudents(req.POST)
         a = req.POST['course']
         b = req.POST['student']
-        # if a and not b:
-        #     baza = Student.objects.filter(firma_id=a)
-        # elif b and not a:
-        #     c = Product.objects.get(id=b).name
-        #     baza = Product.objects.filter(name=c)
-        # elif a and b:
-        #     c = Product.objects.get(id=b).name
-        #     baza = Product.objects.filter(firma_id=a, name=c)
+        search = {}
+        if a:
+            search.update({'course': a})
+        if b:
+            search.update({'id': b})
+        baza = Student.objects.filter(**search)
+
     for i in baza:
         kursi = ', '.join(i.course.values_list('title', flat=True))
         bd.append((i.name, i.group, kursi))
     title = ('Имя', 'Группа', 'Курсы')
+    data = {'table': bd, 'title': title, 'forma': anketa}
+    return render(req, 'totable.html', context=data)
+
+
+def table3(req):
+    baza = User.objects.all()
+    anketa = ''
+    bd = []
+    # if req.POST:
+    #     anketa = FormStudents(req.POST)
+    #     a = req.POST['course']
+    #     b = req.POST['student']
+    #     search = {}
+    #     if a:
+    #         search.update({'course': a})
+    #     if b:
+    #         search.update({'id': b})
+    #     baza = Student.objects.filter(**search)
+
+    for i in baza:
+        bd.append((i.name, i.account.login, i.account.password))
+    title = ('Имя', 'Логин', 'Пароль')
     data = {'table': bd, 'title': title, 'forma': anketa}
     return render(req, 'totable.html', context=data)
